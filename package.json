@@ -6,6 +6,7 @@
     "start": "node upload.ts"
   },
   "dependencies": {
-    "express": "^5.3.0"
+    "express": "^5.3.0",
+    "multer": "^2.4.0"
   }
 }
