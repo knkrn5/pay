@@ -6,7 +6,7 @@ import path from "node:path";
 const filepath = `/home/karan/Videos/Money.Heist.S05.ENGLISH.WEBRip.x264-ION10/Money.Heist.S05E01.DUBBED.WEBRip.x264-ION10.mp4`;
 const fileName = path.basename(filepath);
 // const url = "https://rework-parched-unlisted.ngrok-free.dev";
-const url = "http://127.0.0.1:3000";
+const url = "https://test.ka-ran.me";
 
 const { size } = await stat(filepath);
 const stream = createReadStream(filepath);

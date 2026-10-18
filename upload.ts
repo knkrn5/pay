@@ -138,9 +138,11 @@ app.post("/post3", async (req, res) => {
 
     await handle?.close().catch(() => {});
 
-    res.status(error.code === "EEXIST" ? 409 : 500).json({
-      error: error.code === "EEXIST" ? "File already exists" : "Upload failed",
-    });
+    if (!res.headersSent && !res.destroyed) {
+      res.status(error.code === "EEXIST" ? 409 : 500).json({
+        error: error.code === "EEXIST" ? "File already exists" : "Upload failed",
+      });
+    }
   }
 });
 
@@ -148,6 +150,9 @@ app.get("/health", (_request, response) => {
   response.json({ status: "ok health" });
 });
 
-app.listen(port, (err) => {
+const server = app.listen(port, (err) => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+
+server.requestTimeout = 4 * 60 * 60 * 1000; //4 hrs
