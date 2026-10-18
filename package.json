@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node upload.ts"
+    "start": "node upload.ts",
+    "dev": "node upload.ts --watch"
   },
   "dependencies": {
     "express": "^5.3.0",

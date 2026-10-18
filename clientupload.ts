@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 
 const file = new File(
-  [await readFile("./document.pdf")],
+  [await readFile("./index.html")],
   "document.pdf",
   { type: "application/pdf" }
 );
