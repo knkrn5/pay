@@ -81,6 +81,6 @@ app.get("/health", (_request, response) => {
   response.json({ status: "ok health" });
 });
 
-app.listen(port, () => {
+app.listen(port, (err) => {
   console.log(`Server running at http://localhost:${port}`);
 });

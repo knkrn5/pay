@@ -4,7 +4,7 @@ import path from "node:path"
 
 const filepath = `/home/karan/Videos/Money.Heist.S05.ENGLISH.WEBRip.x264-ION10/Money.Heist.S05E01.DUBBED.WEBRip.x264-ION10.mp4`
 const fileName =  path.basename(filepath)
-const url = "https://xx9nsc16-3000.inc1.devtunnels.ms"
+const url = "https://rework-parched-unlisted.ngrok-free.dev"
 
 const stream = createReadStream(filepath);
 
