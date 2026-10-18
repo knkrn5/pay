@@ -24,11 +24,19 @@ payButton.addEventListener("click", async () => {
 
     const checkout = new Razorpay({
       key: "rzp_test_TonjKCtk3qcRek",
-      amount: 500,
+      amount: 50000,
     //   currency: order.currency,
     //   order_id: order.id,
       name: "karan store",
       description: "Example payment",
+      prefill: {
+        name: "John Doe",
+        email: "k@k.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#3399cc",
+      },
     /*   handler: async (payment) => {
         showStatus("Verifying your payment...");
 
