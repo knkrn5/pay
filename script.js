@@ -25,8 +25,8 @@ payButton.addEventListener("click", async () => {
     const checkout = new Razorpay({
       key: "rzp_test_TonjKCtk3qcRek",
       amount: 50000,
-    //   currency: order.currency,
-    //   order_id: order.id,
+      //   currency: order.currency,
+      //   order_id: order.id,
       name: "karan store",
       description: "Example payment",
       prefill: {
@@ -37,7 +37,16 @@ payButton.addEventListener("click", async () => {
       theme: {
         color: "#3399cc",
       },
-    /*   handler: async (payment) => {
+      notes: {
+        description: "Payment for order #12345",
+        amount: 100,
+        test: "key",
+      },
+      handler: async (response) => {
+        console.log("res", response);
+      },
+
+      /*   handler: async (payment) => {
         showStatus("Verifying your payment...");
 
         const verificationResponse = await fetch("/api/verify-payment", {
@@ -52,7 +61,7 @@ payButton.addEventListener("click", async () => {
 
         showStatus("Payment successful.");
       }, */
-     /*  modal: {
+      /*  modal: {
         ondismiss: () => {
           payButton.disabled = false;
           showStatus("Payment cancelled.");
