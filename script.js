@@ -42,8 +42,10 @@ payButton.addEventListener("click", async () => {
         amount: 100,
         test: "key",
       },
-      handler: async (response) => {
-        console.log("res", response);
+      handler(response) {
+        payButton.disabled = false;
+        console.log("Payment success:", response);
+        alert(JSON.stringify(response, null, 2));
       },
 
       /*   handler: async (payment) => {
@@ -69,10 +71,11 @@ payButton.addEventListener("click", async () => {
       }, */
     });
 
-    /* checkout.on("payment.failed", (response) => {
+    checkout.on("payment.failed", (response) => {
       payButton.disabled = false;
-      showStatus(`Payment failed: ${response.error.description}`);
-    }); */
+      console.log(`Payment failed: ${response.error}`);
+      // showStatus(`Payment failed: ${response.error.description}`);
+    });
 
     checkout.open();
   } catch (error) {
