@@ -30,7 +30,7 @@ const paymentHandler = async () => {
 
     // const order = await orderResponse.json();
 
-    const checkout = new Razorpay({
+    const checkout = new window.Razorpay({
       key: "rzp_test_TonjKCtk3qcRek",
       amount: 500,
       //   currency: order.currency,
