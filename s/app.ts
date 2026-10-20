@@ -35,12 +35,6 @@ fastify.get("/", function (req, res) {
 });
 
 fastify.post("/create-order", async (req, res) => {
-  /*  const order = {
-    id: "order_Tq2mmmXIzR3ySn",
-    amount: 500,
-    currency: "INR",
-  }; */
-
   const data = req.body as { amount: number };
 
   if (!data || typeof data.amount !== "number") {
@@ -63,6 +57,74 @@ fastify.post("/create-order", async (req, res) => {
   await writeFile("data.json", JSON.stringify(orderData, null, 2), "utf8");
 
   res.send(order.id);
+});
+
+fastify.put("/capture-pay", async (req, res) => {
+  /* const { payId } = req.params as { payId: string };
+
+  if (!payId) {
+    res.status(400).send({ error: "Order ID is required" });
+    return;
+  }
+  console.log("order id", payId) */
+
+  const order = req.body as { payId: string; orderId: string };
+
+  if (
+    !order ||
+    typeof order.payId !== "string" ||
+    typeof order.orderId !== "string"
+  ) {
+    res.status(400).send({ error: "Invalid request body" });
+    return;
+  }
+  console.log("data from client", order);
+
+  const existingOrder = orderData.find((o) => o.id === order.orderId);
+  if (!existingOrder) {
+    res.status(404).send({ error: "Order not found" });
+    return;
+  }
+
+  const orderRes = await rpi.payments.capture(
+    order.payId,
+    existingOrder.amount,
+    existingOrder.currency,
+    // order.id,
+    // order.amount,
+    // order.currency,
+  );
+  console.log("captured order", orderRes);
+
+  const updatedOrders = orderData.map((o) => {
+    if (o.id === order.orderId) {
+      return {
+        ...o,
+        captured: true,
+      };
+    }
+    return o;
+  });
+
+  await writeFile("data.json", JSON.stringify(updatedOrders, null, 2), "utf8");
+  res.send(orderRes);
+});
+
+fastify.post("/complete-order:orderid", async (req, res) => {
+  const { orderId } = req.params as { orderId: string };
+
+  if (!orderId) {
+    res.status(400).send({ error: "Order ID is required" });
+    return;
+  }
+
+  const order = await rpi.orders.fetch(orderId);
+  console.log(order);
+
+  if (!order) {
+    return res.status(404).send({ error: "Invalid order id" });
+  }
+  return res.send({ message: "Order Created" });
 });
 
 fastify.listen({ port: 3000 }, function (err, address) {
