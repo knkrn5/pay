@@ -22,7 +22,8 @@ const paymentHandler = async (amount: number) => {
       throw new Error("Could not create the payment order.");
     }
 
-    const order = await orderResponse.json();
+    const order = await orderResponse.text();
+    console.log("result of order req", order);
 
     // const order = await orderResponse.json();
 
@@ -30,7 +31,7 @@ const paymentHandler = async (amount: number) => {
       key: "rzp_test_TonjKCtk3qcRek",
       amount: 0,
         // currency: order.currency,
-      order_id: order.id,
+      order_id: order,
       name: "karan store",
       description: "Example payment",
       prefill: {
