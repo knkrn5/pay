@@ -24,9 +24,9 @@ payButton.addEventListener("click", async () => {
 
     const checkout = new Razorpay({
       key: "rzp_test_TonjKCtk3qcRek",
-      amount: 50000,
+      amount: 500,
       //   currency: order.currency,
-      //   order_id: order.id,
+      order_id: "order_Tq2IBSCxOet7qW",
       name: "karan store",
       description: "Example payment",
       prefill: {
@@ -63,7 +63,7 @@ payButton.addEventListener("click", async () => {
 
         showStatus("Payment successful.");
       }, */
-       modal: {
+      modal: {
         ondismiss: () => {
           payButton.disabled = false;
           showStatus("Payment cancelled.");
