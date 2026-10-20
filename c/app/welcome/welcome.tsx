@@ -15,7 +15,7 @@ const paymentHandler = async (amount: number) => {
     const orderResponse = await fetch("http://localhost:3000/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({amount}),
+      body: JSON.stringify({ amount }),
     });
 
     if (!orderResponse.ok) {
@@ -30,7 +30,7 @@ const paymentHandler = async (amount: number) => {
     const checkout = new window.Razorpay({
       key: "rzp_test_TonjKCtk3qcRek",
       amount: 0,
-        // currency: order.currency,
+      // currency: order.currency,
       order_id: order,
       name: "karan store",
       description: "Example payment",
@@ -47,9 +47,26 @@ const paymentHandler = async (amount: number) => {
         amount: 100,
         test: "key",
       },
-      handler(response) {
+      handler: async (response) => {
         console.log("Payment success:", response);
-        alert(JSON.stringify(response, null, 2));
+
+        const verificationResponse = await fetch(
+          `http://localhost:3000/complete-order/${response.razorpay_order_id}`,
+          {
+            // method: "POST",
+            // headers: { "Content-Type": "application/json" },
+            // body: JSON.stringify(payment),
+          },
+        );
+
+        if (!verificationResponse.ok) {
+          throw new Error("Payment verification failed.");
+        }
+
+        const verificationResult = await verificationResponse.json();
+        console.log("Payment verification result:", verificationResult);
+
+        alert(JSON.stringify(verificationResult, null, 2));
       },
 
       /*   handler: async (payment) => {
@@ -86,14 +103,15 @@ const paymentHandler = async (amount: number) => {
 };
 
 export default function Welcome() {
-
   const [amount, setAmount] = useState<number>(100);
 
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <h1>payment gateway</h1>
 
-      <input type="number"  className="mx-2 border border-gray-300 rounded px-2 py-1"
+      <input
+        type="number"
+        className="mx-2 border border-gray-300 rounded px-2 py-1"
         value={amount}
         onChange={(e) => setAmount(Number(e.target.value))}
       />

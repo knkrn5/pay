@@ -110,13 +110,14 @@ fastify.put("/capture-pay", async (req, res) => {
   res.send(orderRes);
 });
 
-fastify.post("/complete-order:orderid", async (req, res) => {
+fastify.get("/complete-order/:orderId", async (req, res) => {
   const { orderId } = req.params as { orderId: string };
 
   if (!orderId) {
     res.status(400).send({ error: "Order ID is required" });
     return;
   }
+  console.log("Order ID:", orderId);
 
   const order = await rpi.orders.fetch(orderId);
   console.log(order);
@@ -124,7 +125,23 @@ fastify.post("/complete-order:orderid", async (req, res) => {
   if (!order) {
     return res.status(404).send({ error: "Invalid order id" });
   }
-  return res.send({ message: "Order Created" });
+
+  if (order.status !== "paid") {
+    return res.status(400).send({ error: "Order not paid yet" });
+  }
+
+  const updatedOrders = orderData.map((o) => {
+    if (o.id === orderId) {
+      return {
+        ...o,
+        completed: true,
+      };
+    }
+    return o;
+  });
+
+  await writeFile("data.json", JSON.stringify(updatedOrders, null, 2), "utf8");
+  return res.send({ message: "Order Completed" });
 });
 
 fastify.listen({ port: 3000 }, function (err, address) {
