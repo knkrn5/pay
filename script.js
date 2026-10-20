@@ -63,17 +63,17 @@ payButton.addEventListener("click", async () => {
 
         showStatus("Payment successful.");
       }, */
-      /*  modal: {
+       modal: {
         ondismiss: () => {
           payButton.disabled = false;
           showStatus("Payment cancelled.");
         },
-      }, */
+      },
     });
 
     checkout.on("payment.failed", (response) => {
       payButton.disabled = false;
-      console.log(`Payment failed: ${response.error}`);
+      console.log(`Payment failed, `, response.error);
       // showStatus(`Payment failed: ${response.error.description}`);
     });
 
