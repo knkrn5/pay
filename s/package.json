@@ -9,8 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
+    "@fastify/cors": "^11.3.1",
     "fastify": "^5.12.7",
     "razorpay": "^2.9.8"
   }

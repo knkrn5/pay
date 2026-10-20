@@ -1,6 +1,7 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import type { Route } from "./+types/welcome";
+import { useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,32 +10,27 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-/* export const links: Route.LinksFunction = () => [
-  {
-    rel: "preconnect",
-    href: "https://checkout.razorpay.com/v1/checkout.js",
-  },
-]; */
-
-const paymentHandler = async () => {
+const paymentHandler = async (amount: number) => {
   try {
-    /* const orderResponse = await fetch("/api/create-order", {
+    const orderResponse = await fetch("http://localhost:3000/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({}),
+      body: JSON.stringify({amount}),
     });
 
     if (!orderResponse.ok) {
       throw new Error("Could not create the payment order.");
-    } */
+    }
+
+    const order = await orderResponse.json();
 
     // const order = await orderResponse.json();
 
     const checkout = new window.Razorpay({
       key: "rzp_test_TonjKCtk3qcRek",
-      amount: 500,
-      //   currency: order.currency,
-      order_id: "order_Tq2mmmXIzR3ySn",
+      amount: 0,
+        // currency: order.currency,
+      order_id: order.id,
       name: "karan store",
       description: "Example payment",
       prefill: {
@@ -89,13 +85,21 @@ const paymentHandler = async () => {
 };
 
 export default function Welcome() {
+
+  const [amount, setAmount] = useState<number>(100);
+
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <h1>payment gateway</h1>
 
+      <input type="number"  className="mx-2 border border-gray-300 rounded px-2 py-1"
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+      />
+
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
-        onClick={paymentHandler}
+        onClick={() => paymentHandler(amount)}
       >
         pay
       </button>
