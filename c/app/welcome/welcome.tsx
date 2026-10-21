@@ -10,8 +10,25 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+function loadScript(src: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const existingScript = document.getElementById("razorpay-checkout-scripts");
+    if (existingScript) {
+      return resolve();
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.id = "razorpay-checkout-scripts";
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+    document.body.appendChild(script);
+  });
+}
+
 const paymentHandler = async (amount: number) => {
   try {
+    await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+
     const orderResponse = await fetch("http://localhost:3000/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
